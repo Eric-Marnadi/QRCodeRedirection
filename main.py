@@ -11,19 +11,19 @@ class Msg(BaseModel):
 
 @app.get("/")
 async def root():
-    return RedirectResponse(link)
+    return RedirectResponse(os.environ.get("LINK"))
 
 
 @app.post("/change_link/{token}")
 async def change_link(token: str, msg: Msg):
     if token == os.environ.get('LINK_TOKEN'):
-        link = msg.msg
-        return {"message": "Was able to change link to " + link}
-    return {"message": "Token was wrong", "token": token, "real": os.environ.get("LINK_TOKEN")}
+        os.environ["LINK"] = msg.msg
+        return {"message": "Was able to change link to " + msg.msg}
+    return {"message": "Token was wrong"}
 
 @app.get("/link")
 async def link():
-    return {"link": link}
+    return {"link": os.environ.get("LINK")}
 
 
 @app.get("/path/{path_id}")
