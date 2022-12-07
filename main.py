@@ -4,26 +4,20 @@ from pydantic import BaseModel
 import os
 
 app = FastAPI()
+link = "https://www.youtube.com/"
 
 class Msg(BaseModel):
     msg: str
 
-
-
 @app.get("/")
 async def root():
-    f = open("link.txt", "r")
-    link = f.read()
-    f.close()
     return RedirectResponse(link)
 
 
 @app.post("/change_link/{token}")
 async def change_link(token: str, msg: Msg):
     if token == os.environ.get('LINK_TOKEN'):
-        f = open("link.txt", "w")
-        f.write(msg.msg)
-        f.close()
+        link = msg.msg
         return {"message": "Was able to change link"}
     return {"message": "Token was wrong"}
 
