@@ -1,5 +1,7 @@
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
+import os
 
 app = FastAPI()
 
@@ -7,15 +9,23 @@ class Msg(BaseModel):
     msg: str
 
 
+
 @app.get("/")
 async def root():
-    return {"message": "Hello World. Welcome to FastAPI!"}
+    f = open("link.txt", "r")
+    link = f.read()
+    f.close()
+    return RedirectResponse(link)
 
 
-@app.get("/path")
-async def demo_get():
-    return {"message": "This is /path endpoint, use a post request to transform the text to uppercase"}
-
+@app.post("/change_link/{token}")
+async def change_link(token: str, msg: Msg):
+    if token == os.environ.get('LINK_TOKEN'):
+        f = open("link.txt", "w")
+        f.write(msg.msg)
+        f.close()
+        return {"message": "Was able to change link"}
+    return {"message": "Token was wrong"}
 
 @app.post("/path")
 async def demo_post(inp: Msg):
