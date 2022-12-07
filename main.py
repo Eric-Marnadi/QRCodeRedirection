@@ -21,9 +21,9 @@ async def change_link(token: str, msg: Msg):
         return {"message": "Was able to change link"}
     return {"message": "Token was wrong"}
 
-@app.post("/path")
-async def demo_post(inp: Msg):
-    return {"message": inp.msg.upper()}
+@app.get("/link")
+async def link():
+    return {"link": link}
 
 
 @app.get("/path/{path_id}")
