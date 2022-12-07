@@ -4,8 +4,6 @@ from pydantic import BaseModel
 import os
 
 app = FastAPI()
-link = "https://www.youtube.com/"
-
 class Msg(BaseModel):
     msg: str
 
@@ -24,8 +22,3 @@ async def change_link(token: str, msg: Msg):
 @app.get("/link")
 async def link():
     return {"link": os.environ.get("LINK")}
-
-
-@app.get("/path/{path_id}")
-async def demo_get_path_id(path_id: int):
-    return {"message": f"This is /path/{path_id} endpoint, use post request to retrieve result"}
